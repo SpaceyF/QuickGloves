@@ -549,8 +549,6 @@ namespace QuickGloves
             _strain = false;
             _state  = State.Flight;
 
-            MelonLogger.Msg($"[QuickGloves] launch {rb.name}: {_launchSpeed:0.0} m/s over {dist:0.0}m in {_flightT:0.00}s, " +
-                            $"mass {rb.mass:0.0}, drag {_drag:0.00}, parts {_bodies.Count}");
 
             Rumble(1f, 0.04f);   // the pop!
             GloveSound.SetBeam(_isLeft, false, palm);
