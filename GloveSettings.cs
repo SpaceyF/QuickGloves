@@ -91,5 +91,7 @@ namespace QuickGloves
         }
 
         private static void Save() => _cat.SaveToFile(false);
+
+        public static MelonPreferences_Category Category => _cat;
     }
 }

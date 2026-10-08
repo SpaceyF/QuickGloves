@@ -3,7 +3,7 @@ using BoneLib.BoneMenu;
 using MelonLoader;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(QuickGloves.QuickGlovesMod), "QuickGloves", "1.0.0", "nontendo")]
+[assembly: MelonInfo(typeof(QuickGloves.QuickGlovesMod), "QuickGloves", "1.1.0", "nontendo")]
 [assembly: MelonGame("Stress Level Zero", "BONELAB")]
 
 namespace QuickGloves
@@ -13,6 +13,7 @@ namespace QuickGloves
         public override void OnInitializeMelon()
         {
             GloveSettings.Initialize();
+            GloveColors.Initialize(GloveSettings.Category);
             QuickModsTheme.Initialize();
             GloveSound.Initialize();
 
@@ -94,6 +95,18 @@ namespace QuickGloves
             look.CreateBool("aim arc", Color.white, GloveSettings.ShowArc, v => GloveSettings.ShowArc = v);
             look.CreateBool("item outline", Color.white, GloveSettings.ShowOutline, v => GloveSettings.ShowOutline = v);
             look.CreateBool("pull trail", Color.white, GloveSettings.ShowTrail, v => GloveSettings.ShowTrail = v);
+
+            // a color page for every glowy thing
+            Page colors = look.CreatePage("colors", new Color(1f, 0.5f, 0.9f));
+            for (int i = 0; i < GloveColors.Count; i++)
+            {
+                int part = i;   // each button remembers its own part
+                Page pg = colors.CreatePage(GloveColors.Names[part], Color.white);
+                pg.CreateBool("own color", Color.white, GloveColors.Custom(part), v => GloveColors.SetCustom(part, v));
+                pg.CreateFloat("hue", Color.white, GloveColors.Hue(part), 10f, 0f, 360f, v => GloveColors.SetHue(part, v));
+                pg.CreateFloat("saturation", Color.white, GloveColors.Sat(part), 0.1f, 0f, 1f, v => GloveColors.SetSat(part, v));
+                pg.CreateBool("rainbow", Color.white, GloveColors.Rainbow(part), v => GloveColors.SetRainbow(part, v));
+            }
         }
 
         public override void OnUpdate()      => GloveManager.OnUpdate();

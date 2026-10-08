@@ -78,6 +78,7 @@ namespace QuickGloves
                 _arc.SetPosition(i, u * u * a + 2f * u * t * mid + t * t * b);
             }
 
+            c = GloveColors.Get(GloveColors.Arc);
             _arc.startColor = new Color(c.r, c.g, c.b, alpha);
             _arc.endColor   = new Color(c.r, c.g, c.b, alpha * 0.55f);
         }
@@ -142,6 +143,7 @@ namespace QuickGloves
             if (!GloveSettings.ShowOutline) { HidePieces(); _outlineId = 0; return; }
             try
             {
+                c = GloveColors.Get(GloveColors.Outline);
                 if (_outlineMat != null) _outlineMat.color = new Color(c.r, c.g, c.b, alpha);
                 for (int i = 0; i < _used; i++)
                 {
@@ -187,14 +189,23 @@ namespace QuickGloves
             if (_trail == null) return;
             _trail.transform.position = pos;
             _trail.Clear();
-            _trail.startColor = new Color(c.r, c.g, c.b, 0.55f);
-            _trail.endColor   = new Color(c.r, c.g, c.b, 0f);
+            PaintTrail();
             _trail.emitting   = true;
         }
 
         public void TrailMove(Vector3 pos)
         {
-            if (_trail != null) _trail.transform.position = pos;
+            if (_trail == null) return;
+            _trail.transform.position = pos;
+            PaintTrail();   // keeps rainbow moving
+        }
+
+        private void PaintTrail()
+        {
+            if (_trail == null) return;
+            Color c = GloveColors.Get(GloveColors.Trail);
+            _trail.startColor = new Color(c.r, c.g, c.b, 0.55f);
+            _trail.endColor   = new Color(c.r, c.g, c.b, 0f);
         }
 
         // stop the trail, let it fade out
@@ -242,6 +253,7 @@ namespace QuickGloves
             t.rotation   = Quaternion.LookRotation(-toEye / dist, Vector3.up)
                          * Quaternion.Euler(0f, 0f, locked ? 45f : 0f);
             t.localScale = Vector3.one * (dist * (locked ? 0.045f : 0.035f));
+            c = GloveColors.Get(GloveColors.Crosshair);
             if (_crossMat != null) _crossMat.color = new Color(c.r, c.g, c.b, locked ? 1f : 0.6f);
         }
 
@@ -317,6 +329,7 @@ namespace QuickGloves
             t.position   = from + dir * (length * 0.5f);
             t.rotation   = Quaternion.FromToRotation(Vector3.up, dir);
             t.localScale = new Vector3(radius * 2f, length * 0.5f, radius * 2f);
+            c = GloveColors.Get(GloveColors.Beam);
             if (_beamMat != null) _beamMat.color = new Color(c.r, c.g, c.b, 0.12f);
         }
 
